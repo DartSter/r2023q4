@@ -1,8 +1,9 @@
 import { Component } from 'react';
+import SearchComponent from './components/SearchComponent/SearchComponent';
 
 class App extends Component {
   render() {
-    return <div>test</div>;
+    return <SearchComponent />;
   }
 }
 
