@@ -1,6 +1,7 @@
 import { ChangeEvent, Component } from 'react';
 import SearchString from '../SearchString/SearchString';
 import SearchResult from '../SearchResult/SearchResult';
+import { fetchPokemonData } from '../../utils/fetchPokemonData';
 import './searchComponent.css';
 export default class SearchComponent extends Component {
   state = {
@@ -16,8 +17,16 @@ export default class SearchComponent extends Component {
     }
   }
 
-  handleSearchClick = () => {
-    localStorage.setItem('searchInput', this.state.searchInput);
+  handleSearchClick = async () => {
+    try {
+      const searchInput = this.state.searchInput;
+      localStorage.setItem('searchInput', searchInput);
+      const data = await fetchPokemonData(searchInput);
+      this.setState({ searchResults: [data] });
+      console.log(data);
+    } catch (error) {
+      console.error('Произошла ошибка:', error);
+    }
   };
 
   handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
