@@ -1,5 +1,10 @@
+export interface IPokemonItem {
+  name: string;
+  url: string;
+}
+
 export async function fetchPokemonList() {
-  const apiUrl = `https://pokeapi.co/api/v2/pokemon?limit=50&offset=0`;
+  const apiUrl = `https://pokeapi.co/api/v2/pokemon?limit=10&offset=0`;
 
   try {
     const response = await fetch(apiUrl);
@@ -9,7 +14,7 @@ export async function fetchPokemonList() {
       );
     }
     const data = await response.json();
-    return data;
+    return data.results;
   } catch (error) {
     throw error;
   }

@@ -2,11 +2,14 @@ import { ChangeEvent, Component } from 'react';
 import SearchString from '../SearchString/SearchString';
 import SearchResult from '../SearchResult/SearchResult';
 import { fetchPokemonData } from '../../utils/fetchPokemonData';
+import { fetchPokemonList } from '../../utils/fetchPokemonList';
+import ItemList from '../ItemList/ItemList';
 import './searchComponent.css';
 export default class SearchComponent extends Component {
   state = {
     searchInput: '',
     searchResults: [],
+    itemsList: [],
   };
 
   componentDidMount() {
@@ -16,13 +19,24 @@ export default class SearchComponent extends Component {
         this.updateSearchResult();
       });
     }
+    if (!this.state.searchInput) {
+      this.getItemList();
+    }
   }
+
+  getItemList = async () => {
+    try {
+      const data = await fetchPokemonList();
+      this.setState({ itemsList: [...data] });
+    } catch (error) {
+      console.error('error:', error);
+    }
+  };
 
   updateSearchResult = async () => {
     try {
       const searchInput = this.state.searchInput;
       const data = await fetchPokemonData(searchInput);
-
       this.setState({ searchResults: [data] });
     } catch (error) {
       console.error('error:', error);
@@ -31,6 +45,8 @@ export default class SearchComponent extends Component {
 
   handleSearchClick = async () => {
     try {
+      this.setState({ searchResults: [] });
+      if (!this.state.searchInput) return;
       const searchInput = this.state.searchInput;
       localStorage.setItem('searchInput', searchInput);
       const data = await fetchPokemonData(searchInput);
@@ -53,7 +69,11 @@ export default class SearchComponent extends Component {
           onSearchInputChange={this.handleSearchInputChange}
           onSearchClick={this.handleSearchClick}
         />
-        <SearchResult searchResults={this.state.searchResults} />
+        {this.state.searchResults.length > 0 ? (
+          <SearchResult searchResults={this.state.searchResults} />
+        ) : (
+          <ItemList listData={this.state.itemsList} />
+        )}
       </div>
     );
   }

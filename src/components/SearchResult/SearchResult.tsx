@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import './SearchResult.css';
 import { IPokemon } from '../../utils/fetchPokemonData';
+import './SearchResult.css';
 export default class SearchResult extends Component<{
   searchResults: IPokemon[] | undefined;
 }> {
