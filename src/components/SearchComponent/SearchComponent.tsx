@@ -7,6 +7,7 @@ export default class SearchComponent extends Component {
   state = {
     searchInput: '',
     searchResults: [],
+    itemList: [],
   };
 
   componentDidMount() {
@@ -23,9 +24,8 @@ export default class SearchComponent extends Component {
       localStorage.setItem('searchInput', searchInput);
       const data = await fetchPokemonData(searchInput);
       this.setState({ searchResults: [data] });
-      console.log(data);
     } catch (error) {
-      console.error('Произошла ошибка:', error);
+      console.error('error:', error);
     }
   };
 
@@ -42,7 +42,7 @@ export default class SearchComponent extends Component {
           onSearchInputChange={this.handleSearchInputChange}
           onSearchClick={this.handleSearchClick}
         />
-        <SearchResult />
+        <SearchResult searchResults={this.state.searchResults} />
       </div>
     );
   }

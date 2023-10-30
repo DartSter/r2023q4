@@ -10,7 +10,7 @@ export default class SearchString extends Component<{
       <div className="search-string">
         <input
           type="text"
-          placeholder="input pokemon name"
+          placeholder="input pokemon name or id"
           value={this.props.searchInput}
           onChange={this.props.onSearchInputChange}
         />
