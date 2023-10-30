@@ -37,7 +37,11 @@ export default class SearchComponent extends Component {
     return (
       <div className="search-wrapper">
         <h1>PockeSearch</h1>
-        <SearchString />
+        <SearchString
+          searchInput={this.state.searchInput}
+          onSearchInputChange={this.handleSearchInputChange}
+          onSearchClick={this.handleSearchClick}
+        />
         <SearchResult />
       </div>
     );
