@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './SearchString.css';
 export default class SearchString extends Component {
   render() {
