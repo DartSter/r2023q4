@@ -46,6 +46,7 @@ export default class SearchComponent extends Component {
   handleSearchClick = async () => {
     try {
       this.setState({ searchResults: [] });
+      localStorage.setItem('searchInput', '');
       if (!this.state.searchInput) return;
       const searchInput = this.state.searchInput;
       localStorage.setItem('searchInput', searchInput);

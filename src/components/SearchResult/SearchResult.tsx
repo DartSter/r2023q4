@@ -10,18 +10,20 @@ export default class SearchResult extends Component<{
         <h2 className="result-header">Result</h2>
         <div className="result-field">
           {this.props.searchResults && this.props.searchResults[0] && (
-            <div>
-              <div>Name: {this.props.searchResults[0].name}</div>
+            <div className="result">
+              <div className="result-name">
+                Name: {this.props.searchResults[0].name}
+              </div>
               <div>Id: {this.props.searchResults[0].id}</div>
               <div>Height: {this.props.searchResults[0].height}</div>
               <div className="abilities">
                 {this.props.searchResults[0].ability.map((item) => (
-                  <div key={item.ability.name}>
-                    <div key={item.ability.name}>
-                      Ability:{item.ability.name}
+                  <div key={item.ability.name} className="ability">
+                    <div key={item.ability.name} className="ability-name">
+                      Ability: {item.ability.name}
                     </div>
                     <div key={item.ability.url}>
-                      Ability url:{item.ability.url}
+                      Ability url: {item.ability.url}
                     </div>
                     <div>Is hide: {item.is_hidden ? 'true' : 'false'}</div>
                     <div>Slot: {item.slot}</div>
