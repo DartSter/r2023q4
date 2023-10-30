@@ -7,16 +7,27 @@ export default class SearchComponent extends Component {
   state = {
     searchInput: '',
     searchResults: [],
-    itemList: [],
   };
 
   componentDidMount() {
     const savedSearchInput = localStorage.getItem('searchInput');
     if (savedSearchInput) {
-      this.setState({ searchInput: savedSearchInput });
-      this.handleSearchClick();
+      this.setState({ searchInput: savedSearchInput }, () => {
+        this.updateSearchResult();
+      });
     }
   }
+
+  updateSearchResult = async () => {
+    try {
+      const searchInput = this.state.searchInput;
+      const data = await fetchPokemonData(searchInput);
+
+      this.setState({ searchResults: [data] });
+    } catch (error) {
+      console.error('error:', error);
+    }
+  };
 
   handleSearchClick = async () => {
     try {
