@@ -1,23 +1,29 @@
-import { ChangeEvent, Component } from 'react';
 import './SearchString.css';
-export default class SearchString extends Component<{
+
+interface SearchStringProps {
   searchInput: string;
-  onSearchInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onSearchInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSearchClick: () => void;
-}> {
-  render() {
-    return (
-      <div className="search-string">
-        <input
-          type="text"
-          placeholder="input pokemon name or id"
-          value={this.props.searchInput}
-          onChange={this.props.onSearchInputChange}
-        />
-        <button type="button" onClick={this.props.onSearchClick}>
-          Search
-        </button>
-      </div>
-    );
-  }
 }
+
+const SearchString: React.FC<SearchStringProps> = ({
+  searchInput,
+  onSearchInputChange,
+  onSearchClick,
+}: SearchStringProps) => {
+  return (
+    <div className="search-string">
+      <input
+        type="text"
+        placeholder="input pokemon name or id"
+        value={searchInput}
+        onChange={onSearchInputChange}
+      />
+      <button type="button" onClick={onSearchClick}>
+        Search
+      </button>
+    </div>
+  );
+};
+
+export default SearchString;
