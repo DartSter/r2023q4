@@ -1,81 +1,78 @@
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import SearchString from '../SearchString/SearchString';
 import SearchResult from '../SearchResult/SearchResult';
-import { fetchPokemonData } from '../../utils/fetchPokemonData';
+import { IPokemon, fetchPokemonData } from '../../utils/fetchPokemonData';
 import { fetchPokemonList } from '../../utils/fetchPokemonList';
 import ItemList from '../ItemList/ItemList';
 import './searchComponent.css';
-export default class SearchComponent extends Component {
-  state = {
-    searchInput: '',
-    searchResults: [],
-    itemsList: [],
-  };
+export const SearchComponent = () => {
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState<IPokemon[] | []>([]);
+  const [itemList, setItemList] = useState<[]>([]);
 
-  componentDidMount() {
+  useEffect(() => {
     const savedSearchInput = localStorage.getItem('searchInput');
     if (savedSearchInput) {
-      this.setState({ searchInput: savedSearchInput }, () => {
-        this.updateSearchResult();
-      });
+      setSearchInput(savedSearchInput);
     }
-    if (!this.state.searchInput) {
-      this.getItemList();
-    }
-  }
+  }, []);
 
-  getItemList = async () => {
+  useEffect(() => {
+    if (searchInput) {
+      updateSearchResult();
+    } else {
+      getItemList();
+    }
+  }, [searchInput]);
+
+  const getItemList = async () => {
     try {
       const data = await fetchPokemonList();
-      this.setState({ itemsList: [...data] });
+      setItemList(data);
     } catch (error) {
       console.error('error:', error);
     }
   };
 
-  updateSearchResult = async () => {
+  const updateSearchResult = async () => {
     try {
-      const searchInput = this.state.searchInput;
       const data = await fetchPokemonData(searchInput);
-      this.setState({ searchResults: [data] });
+      setSearchResults([data]);
     } catch (error) {
       console.error('error:', error);
     }
   };
 
-  handleSearchClick = async () => {
+  const handleSearchClick = async () => {
     try {
-      this.setState({ searchResults: [] });
+      setSearchResults([]);
       localStorage.setItem('searchInput', '');
-      if (!this.state.searchInput) return;
-      const searchInput = this.state.searchInput;
+      if (!searchInput) return;
       localStorage.setItem('searchInput', searchInput);
       const data = await fetchPokemonData(searchInput);
-      this.setState({ searchResults: [data] });
+      setSearchResults([data]);
     } catch (error) {
       console.error('error:', error);
     }
   };
 
-  handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchInput: event.target.value });
+  const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
   };
 
-  render() {
-    return (
-      <div className="search-wrapper">
-        <h1>PockeSearch</h1>
-        <SearchString
-          searchInput={this.state.searchInput}
-          onSearchInputChange={this.handleSearchInputChange}
-          onSearchClick={this.handleSearchClick}
-        />
-        {this.state.searchResults.length > 0 ? (
-          <SearchResult searchResults={this.state.searchResults} />
-        ) : (
-          <ItemList listData={this.state.itemsList} />
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="search-wrapper">
+      <h1>Pockesearch</h1>
+      <SearchString
+        onSearchInputChange={handleSearchInputChange}
+        onSearchClick={handleSearchClick}
+        searchInput={searchInput}
+      />
+      {searchResults.length > 0 ? (
+        <SearchResult searchResults={searchResults} />
+      ) : (
+        <ItemList listData={itemList} />
+      )}
+    </div>
+  );
+};
